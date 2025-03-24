@@ -51,8 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: ListView.builder(
           itemCount: savedImages.length,
-          reverse: true,
-          itemBuilder: (contex, index) {
+          // reverse: true,
+          itemBuilder: (context, index) {
             return Column(
               children: [
                 const Row(
