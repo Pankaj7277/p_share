@@ -48,6 +48,16 @@ class _HomeScreenState extends State<HomeScreen> {
           "Home",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                _clearSavedImages;
+              },
+              icon: Icon(
+                Icons.delete,
+                color: Colors.red,
+              ))
+        ],
       ),
       body: ListView.builder(
           itemCount: savedImages.length,
@@ -107,7 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-               const  SizedBox(height: 10,)
+                const SizedBox(
+                  height: 10,
+                )
               ],
             );
           }),
