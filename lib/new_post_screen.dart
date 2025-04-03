@@ -23,6 +23,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
     _loadGallery();
   }
 
+//load gallery data
   Future<void> _loadGallery() async {
     final PermissionState ps = await PhotoManager.requestPermissionExtend();
     print("permit ${ps.isAuth}");
@@ -45,7 +46,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
     }
   }
 
-
+//pick image from camera
   void _pickFromCamera() async {
     final ImagePicker picker = ImagePicker();
     final XFile? photo = await picker.pickImage(source: ImageSource.camera);
@@ -88,9 +89,12 @@ class _NewPostScreenState extends State<NewPostScreen> {
         actions: [
           TextButton(
               onPressed: () {
-
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SelectedAndPreview(selectedImage: _selectedImage,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SelectedAndPreview(
+                              selectedImage: _selectedImage,
+                            )));
               },
               child: const Text(
                 "Next",
@@ -102,181 +106,173 @@ class _NewPostScreenState extends State<NewPostScreen> {
         ],
       ),
       body: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                children: [
-                  // Preview of selected image
-                  _selectedImage != null
-                      ? FutureBuilder(
-                          future: _selectedImage!.file,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                    ConnectionState.done &&
-                                snapshot.hasData) {
-                              return Image.file(snapshot.data!,
-                                  width: double.infinity,
-                                  height: 220,
-                                  fit: BoxFit.cover);
-                            }
-                            return const SizedBox(
-                                height: 220,
-                                child:
-                                    Center(child: CircularProgressIndicator()));
-                          },
-                        )
-                      : Container(height: 220, color: Colors.grey[300]),
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            // Preview of selected image
+            _selectedImage != null
+                ? FutureBuilder(
+                    future: _selectedImage!.file,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          snapshot.hasData) {
+                        return Image.file(snapshot.data!,
+                            width: double.infinity,
+                            height: 220,
+                            fit: BoxFit.cover);
+                      }
+                      return const SizedBox(
+                          height: 220,
+                          child: Center(child: CircularProgressIndicator()));
+                    },
+                  )
+                : Container(height: 220, color: Colors.grey[300]),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: 'Recent',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 18),
-                          icon: const Icon(Icons.keyboard_arrow_down, size: 30),
-                          items: dropdownItems.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Row(
-                                children: [
-                                  Text(value),
-                                  const SizedBox(
-                                      width:
-                                          10), // Space between text and arrow
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (newValue) {
-                            print(newValue);
-                          },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: 'Recent',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 18),
+                    icon: const Icon(Icons.keyboard_arrow_down, size: 30),
+                    items: dropdownItems.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Row(
+                          children: [
+                            Text(value),
+                            const SizedBox(
+                                width: 10), // Space between text and arrow
+                          ],
                         ),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      print(newValue);
+                    },
+                  ),
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: _loadGallery,
+                        icon: const Icon(Icons.note_outlined)),
+                    IconButton(
+                        onPressed: _pickFromCamera,
+                        icon: const Icon(Icons.camera_alt_outlined))
+                  ],
+                ),
+              ],
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        child: Icon(Icons.photo_size_select_actual_outlined),
                       ),
-                      Row(
-                        children: [
-                          IconButton(
-                              onPressed: _loadGallery,
-                              icon: const Icon(Icons.note_outlined)),
-                          IconButton(
-                              onPressed: _pickFromCamera,
-                              icon: const Icon(Icons.camera_alt_outlined))
-                        ],
+                      SizedBox(
+                        height: 5,
                       ),
+                      Text("Recent")
                     ],
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: [
-                        Column(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child:
-                                  Icon(Icons.photo_size_select_actual_outlined),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text("Recent")
-                          ],
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Icon(Icons.photo_library_outlined),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text("Photos")
-                          ],
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Icon(Icons.camera_alt_outlined),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text("Videos")
-                          ],
-                        )
-                      ],
-                    ),
+                  SizedBox(
+                    width: 20,
                   ),
-                  // GridView for gallery images
-                  Expanded(
-                    child: GridView.builder(
-                      padding: const EdgeInsets.all(8),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                        crossAxisSpacing: 4,
-                        mainAxisSpacing: 4,
+                  Column(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        child: Icon(Icons.photo_library_outlined),
                       ),
-                      itemCount: _mediaList.length,
-                      itemBuilder: (context, index) {
-                        return FutureBuilder<File?>(
-                          future: _mediaList[index].file,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                    ConnectionState.done &&
-                                snapshot.hasData) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _selectedImage = _mediaList[index];
-                                  });
-                                },
-                                child: Stack(
-                                  alignment: Alignment.topRight,
-                                  children: [
-                                    Image.file(snapshot.data!,
-                                        fit: BoxFit.cover),
-                                    if (_selectedImage == _mediaList[index])
-                                      Container(
-                                        width: 20,
-                                        height: 20,
-                                        margin: const EdgeInsets.all(4),
-                                        decoration: const BoxDecoration(
-                                          color: Colors.purple,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            "✔",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              );
-                            }
-                            return Container(color: Colors.grey[300]);
-                          },
-                        );
-                      },
-                    ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text("Photos")
+                    ],
                   ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Column(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        child: Icon(Icons.camera_alt_outlined),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text("Videos")
+                    ],
+                  )
                 ],
               ),
             ),
+            // GridView for gallery images
+            Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(8),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 4,
+                  mainAxisSpacing: 4,
+                ),
+                itemCount: _mediaList.length,
+                itemBuilder: (context, index) {
+                  return FutureBuilder<File?>(
+                    future: _mediaList[index].file,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          snapshot.hasData) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedImage = _mediaList[index];
+                            });
+                          },
+                          child: Stack(
+                            alignment: Alignment.topRight,
+                            children: [
+                              Image.file(snapshot.data!, fit: BoxFit.cover),
+                              if (_selectedImage == _mediaList[index])
+                                Container(
+                                  width: 20,
+                                  height: 20,
+                                  margin: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.purple,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      "✔",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 12),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        );
+                      }
+                      return Container(color: Colors.grey[300]);
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
