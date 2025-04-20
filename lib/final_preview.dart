@@ -26,7 +26,8 @@ class FinalPreview extends StatelessWidget {
   // Function to save image path list in SharedPreferences
   Future<void> _saveImagePathToPrefs(String imagePath) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> imagePaths = prefs.getStringList('saved_images') ?? []; // Get existing list
+    List<String> imagePaths =
+        prefs.getStringList('saved_images') ?? []; // Get existing list
     imagePaths.add(imagePath); // Add new image path
     await prefs.setStringList('saved_images', imagePaths); // Save updated list
   }
@@ -54,7 +55,7 @@ class FinalPreview extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Container(
-                  height: 400,
+                    height: 400,
                     width: MediaQuery.of(context).size.width,
                     child: Image.file(filteredImage)),
               ),
@@ -68,16 +69,20 @@ class FinalPreview extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purpleAccent,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
                 ),
                 onPressed: () async {
                   String savedImagePath = await _saveImage(filteredImage);
                   if (savedImagePath.isNotEmpty) {
-                    await _saveImagePathToPrefs(savedImagePath); // Save path in SharedPreferences
+                    await _saveImagePathToPrefs(
+                        savedImagePath); // Save path in SharedPreferences
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeScreen()),
-                          (route) => false, // This removes all previous routes from the stack
+                      MaterialPageRoute(
+                          builder: (context) => const HomeScreen()),
+                      (route) =>
+                          false, // This removes all previous routes from the stack
                     );
                   }
                 },
